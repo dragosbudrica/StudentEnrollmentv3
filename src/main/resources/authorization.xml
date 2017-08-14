@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<authorizations>
+    <role id="Admin">
+        <actions>
+            <action>courseScheduling</action>
+            <action>newAccount</action>
+            <action>addNewAccount</action>
+            <action>getCourseEvents</action>
+            <action>getCourseTitles</action>
+            <action>schedule</action>
+        </actions>
+    </role>
+    <role id="Professor">
+        <actions>
+            <action>professorCourses</action>
+            <action>getProfessorCourses</action>
+            <action>addNewCourse</action>
+            <action>timetable</action>
+            <action>getEvents</action>
+            <action>courseDetails</action>
+            <action>getLectures</action>
+            <action>upload</action>
+            <action>download</action>
+            <action>remove</action>
+            <action>newCourse</action>
+        </actions>
+    </role>
+    <role id="Student">
+        <actions>
+            <action>allCourses</action>
+            <action>getAllCourses</action>
+            <action>studentCourses</action>
+            <action>getStudentCourses</action>
+            <action>enroll</action>
+            <action>timetable</action>
+            <action>getEvents</action>
+            <action>courseDetails</action>
+            <action>getLectures</action>
+            <action>download</action>
+        </actions>
+    </role>
+</authorizations>

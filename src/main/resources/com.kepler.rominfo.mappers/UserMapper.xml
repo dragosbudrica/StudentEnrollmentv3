@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kepler.rominfo.mappers.UserMapper">
+
+    <resultMap type="User" id="UserResult">
+        <id property="userId" column="userid"/>
+        <result property="firstName" column="firstname"/>
+        <result property="lastName" column="lastname"/>
+        <result property="ssn" column="ssn"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="role" column="role"/>
+    </resultMap>
+
+    <resultMap type="Student" id="StudentResult">
+        <id property="studentId" column="studentid"/>
+    </resultMap>
+
+    <resultMap type="Professor" id="ProfessorResult">
+        <id property="professorId" column="professorid"/>
+    </resultMap>
+
+    <select id="getAllUsers" resultMap="UserResult">
+        SELECT u."userid" AS userId,
+        u."firstname" AS firstName,
+        u."lastname" AS lastName,
+        u."ssn" AS ssn,
+        u."email" AS email,
+        u."password" AS password,
+        u."role" AS role
+        FROM public."user" u
+    </select>
+
+    <select id="getUserById" resultMap="UserResult">
+        SELECT u."userid" AS userId,
+        u."firstname" AS firstName,
+        u."lastname" AS lastName,
+        u."ssn" AS ssn,
+        u."email" AS email,
+        u."password" AS password,
+        u."role" AS role
+        FROM public."user" u
+        WHERE u.userid=#{userId}
+    </select>
+
+    <insert id = "addUser">
+        insert into "user" (email, password, firstname, lastname, ssn, role)
+        VALUES (#{email},#{password},#{firstName},#{lastName},#{ssn},#{role});
+    </insert>
+
+    <insert id = "addStudent">
+        insert into "student" (userid)
+        VALUES (#{userId});
+    </insert>
+
+    <insert id = "addProfessor">
+        insert into "professor" (userid)
+        VALUES (#{userId});
+    </insert>
+
+    <select id="findByEmail" resultMap="UserResult">
+        SELECT u."userid" AS userId,
+        u."firstname" AS firstName,
+        u."lastname" AS lastName,
+        u."ssn" AS ssn,
+        u."email" AS email,
+        u."password" AS password,
+        u."role" AS role
+        FROM public."user" u
+        WHERE u."email"=#{email}
+    </select>
+
+    <select id="findStudentByEmail" resultMap="StudentResult">
+        SELECT s."studentid" AS studentId
+        FROM public."student" s
+        INNER JOIN public."user" u
+        ON s.userid = u.userid
+        WHERE u."email"=#{email}
+    </select>
+
+    <select id="findProfessorByEmail" resultMap="ProfessorResult">
+        SELECT p."professorid" AS professorId
+        FROM public."professor" p
+        INNER JOIN public."user" u
+        ON p.userid = u.userid
+        WHERE u."email"=#{email}
+    </select>
+</mapper>

@@ -13,13 +13,6 @@ td span {
     cursor:pointer;
 }
 
-
-#paginationLectures a {
-    display:inline-block;
-    margin-right:5px;
-
-}
-
 #studentCourses {
     margin: 50px 50px 10px 10px;
     float: left;
@@ -31,15 +24,7 @@ td span {
     color: red;
 }
 
-#courseDetails {
-    float:left;
-    display: none;
-    margin: 60px 10px 10px 10px;
-}
-
 #message {
     display: none;
     text-align: center;
 }
-
-

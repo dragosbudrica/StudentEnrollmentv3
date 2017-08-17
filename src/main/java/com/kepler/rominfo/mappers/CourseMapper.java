@@ -25,4 +25,5 @@ public interface CourseMapper {
     void addCourse(@Param("course") Course course);
     void editCourse(@Param("courseCode") long courseCode, @Param("courseName") String courseName, @Param("categoryId") long categoryId);
     void deleteCourse(@Param("courseCode") long courseCode);
+    List<Course> getStudentCoursesWithGrades(@Param("studentId") long studentId);
 }

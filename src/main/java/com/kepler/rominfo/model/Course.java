@@ -17,6 +17,24 @@ public class Course implements Serializable {
     private long professorId;
     private long categoryId;
     private int numberOfEnrolledStudents;
+    private int mark;
+    private boolean validated;
+
+    public int getMark() {
+        return mark;
+    }
+
+    public void setMark(int mark) {
+        this.mark = mark;
+    }
+
+    public boolean isValidated() {
+        return validated;
+    }
+
+    public void setValidated(boolean validated) {
+        this.validated = validated;
+    }
 
     public int getNumberOfEnrolledStudents() {
         return numberOfEnrolledStudents;

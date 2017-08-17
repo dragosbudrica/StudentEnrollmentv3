@@ -104,9 +104,9 @@ Utils.sortLectureAscending = function sortLectureAscending(data, courseName, cou
         }
     });
     if (role === "Professor") {
-        Lectures.displayLecturesProfessor(data, courseName, courseCode);
+        Lectures.displayCourseDetailsProfessor(data, courseName, courseCode);
     } else if (role === "Student") {
-        Lectures.displayLecturesStudent(data, courseName);
+        Lectures.displayCourseDetailsStudent(data, courseName);
     }
 };
 

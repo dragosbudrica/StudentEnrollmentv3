@@ -94,4 +94,23 @@ public class RestGradeController {
             ex.printStackTrace();
         }
     }
+
+    @RequestMapping(value = "/getMyCoursesWithGrades", method = RequestMethod.GET)
+    public List<CourseDto> getMyCoursesWithGrades(HttpSession session) {
+        List<CourseDto> studentCoursesWithGrades = new ArrayList<>();
+        try {
+            User user = (User) session.getAttribute("user");
+            List<Course> courses = courseService.getStudentCoursesWithGrades(user.getEmail());
+
+            for (Course currentCourse : courses) {
+                CourseDto courseDto = courseService.putCourseDtoProperties(currentCourse);
+                courseDto.setMark(currentCourse.getMark());
+                courseDto.setValidated(currentCourse.isValidated());
+                studentCoursesWithGrades.add(courseDto);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return studentCoursesWithGrades;
+    }
 }

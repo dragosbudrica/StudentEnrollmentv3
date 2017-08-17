@@ -10,11 +10,34 @@
 <head>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="/css/table.css"/>
-    <link rel="stylesheet" href="/css/studentCourses.css"/>
+    <link rel="stylesheet" href="/css/myGrades.css"/>
     <script type="text/javascript" src="/js/common.js"></script>
-    <script type="text/javascript" src="/js/studentCourses.js"></script>
+    <script type="text/javascript" src="/js/myGrades.js"></script>
 </head>
 <body>
-    <jsp:include page="fragments/studentCoursesFrag.jsp"/>
+<div id="warning">
+    <img alt="" src="/resources/images/icon-warning-png-11.png"/>
+    <h1></h1>
+</div>
+<div id="studentCourses">
+    <h1>My Courses</h1>
+    <table id="grid">
+        <thead>
+        <tr>
+            <th>Course Name</th>
+            <th>Category</th>
+            <th>Professor</th>
+            <th>Grade</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <td colspan="4" id="paginationCourses"></td>
+        </tr>
+        </tfoot>
+        <tbody id="tbodyCourses"></tbody>
+    </table>
+    <div id="message"></div>
+</div>
 </body>
 </html>

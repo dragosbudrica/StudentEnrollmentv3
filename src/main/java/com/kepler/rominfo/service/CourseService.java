@@ -47,6 +47,11 @@ public class CourseService {
         return courseMapper.getStudentCourses(student.getStudentId());
     }
 
+    public List<Course> getStudentCoursesWithGrades(String email) {
+        Student student = userMapper.findStudentByEmail(email);
+        return courseMapper.getStudentCoursesWithGrades(student.getStudentId());
+    }
+
     public List<Course> getProfessorCourses(String email) {
         Professor professor = userMapper.findProfessorByEmail(email);
         return courseMapper.getProfessorCourses(professor.getProfessorId());

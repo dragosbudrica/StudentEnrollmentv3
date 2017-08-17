@@ -22,6 +22,8 @@
         <result property="numberOfLectures" column="numberoflectures"/>
         <result property="startTime" column="starttime"/>
         <result property="endTime" column="endtime"/>
+        <result property="mark" column="mark"/>
+        <result property="validated" column="validated"/>
         <result property="numberOfEnrolledStudents" column="numberOfEnrolledStudents"/>
         <association property="user" resultMap="UserResult" columnPrefix="user_"/>
         <association property="category" resultMap="CategoryResult" columnPrefix="cat_"/>
@@ -130,6 +132,32 @@
                 ON e.studentid = s.studentid
         WHERE s."studentid" = #{studentId}
               AND c."starttime" NOTNULL
+    </select>
+
+
+    <select id="getStudentCoursesWithGrades" resultMap="CourseResult">
+        SELECT
+        c."coursecode" AS courseCode,
+        c."coursename" AS courseName,
+            cat."categoryid" AS cat_categoryid,
+            cat."categoryname"       AS cat_categoryname,
+        u."firstname"  AS user_firstname,
+        u."lastname"   AS user_lastname,
+        u."userid"     AS user_userid,
+        e."mark" AS mark,
+        e."isValidated" AS validated
+        FROM public."course" c
+            INNER JOIN category cat
+                ON c.categoryid = cat.categoryid
+        INNER JOIN professor p
+        ON c.professorid = p.professorId
+        INNER JOIN public."user" u
+        ON p.userid = u.userid
+        INNER JOIN enrollment e
+        ON c.coursecode = e.coursecode
+        INNER JOIN student s
+        ON e.studentid = s.studentid
+        WHERE s."studentid" = #{studentId}
     </select>
 
     <select id="getOnlyCoursesWithDates" resultMap="CourseResult">

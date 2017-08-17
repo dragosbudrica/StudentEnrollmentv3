@@ -1,8 +1,10 @@
+var NewCourse = NewCourse || {};
+
 $(document).ready(function () {
-    getCategories();
+    NewCourse.getCategories();
 });
 
-function getCategories() {
+NewCourse.getCategories = function getCategories() {
     $.ajax({
         url: '/getAllCategories',
         type: 'GET',
@@ -14,16 +16,16 @@ function getCategories() {
                 var category = "<option value=" + data[index].categoryName + ">" + data[index].categoryName + "</option>";
                 $(category).appendTo('#categoryAddCourse');
             }
-            checkFields();
-            createCourse();
+            NewCourse.checkFields();
+            NewCourse.prepareCourseCreation();
         },
         error: function (data) {
             console.log(data);
         }
     });
-}
+};
 
-function checkFields() {
+NewCourse.checkFields = function checkFields() {
     // Course Name can't be blank
     $('#newCourse_courseName').on('input', function () {
         var input = $(this);
@@ -55,9 +57,9 @@ function checkFields() {
             input.next().removeClass("error").addClass("error_show");
         }
     });
-}
+};
 
-function createCourse() {
+NewCourse.prepareCourseCreation = function prepareCourseCreation() {
     $('#submit').click(function (event) {
         var form_data = $("#newCourse input[type=text], textarea").serializeArray();
         var error_free = true;
@@ -82,40 +84,42 @@ function createCourse() {
             var numberOfLectures = $('#numberOfLectures').val();
             var description = $('#newCourse_description').val();
 
-            var jsonParams = JSON.stringify({
-                'courseName': courseName,
-                'category': category,
-                'numberOfLectures': numberOfLectures,
-                'description': description
-            });
-
-            console.log(jsonParams);
-
-            $.ajax({
-                url: '/addNewCourse',
-                type: 'POST',
-                data: jsonParams,
-                contentType: 'application/json',
-                traditional: true,
-                success: function (data) {
-                    var message = $('#message');
-                    if (data === "Course creation successful!") {
-                        message.text("Course Creation Successful!");
-                        message.css('color', 'green');
-                        message.fadeIn('slow');
-                        message.fadeOut('slow');
-                    }
-                    else {
-                        message.text(data);
-                        message.css('color', 'red');
-                        message.fadeIn('slow');
-                        message.fadeOut('slow');
-                    }
-                },
-                error: function (data) {
-                    console.log(data);
-                }
-            });
+            NewCourse.sendCreateCourseAjax(courseName, category, numberOfLectures, description);
         }
     });
-}
+};
+
+NewCourse.sendCreateCourseAjax = function sendCreateCourseAjax(courseName, category, numberOfLectures, description) {
+    var jsonParams = JSON.stringify({
+        'courseName': courseName,
+        'category': category,
+        'numberOfLectures': numberOfLectures,
+        'description': description
+    });
+
+    $.ajax({
+        url: '/addNewCourse',
+        type: 'POST',
+        data: jsonParams,
+        contentType: 'application/json',
+        traditional: true,
+        success: function (data) {
+            var message = $('#message');
+            if (data === "Course creation successful!") {
+                message.text("Course Creation Successful!");
+                message.css('color', 'green');
+                message.fadeIn('slow');
+                message.fadeOut('slow');
+            }
+            else {
+                message.text(data);
+                message.css('color', 'red');
+                message.fadeIn('slow');
+                message.fadeOut('slow');
+            }
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+};

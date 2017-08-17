@@ -55,4 +55,14 @@
         <put-attribute name="body" value="/WEB-INF/views/courseScheduling.jsp"/>
     </definition>
 
+    <definition name="grades" extends="base-definition">
+        <put-attribute name="title" value="Grades"/>
+        <put-attribute name="body" value="/WEB-INF/views/grades.jsp"/>
+    </definition>
+
+    <definition name="myGrades" extends="base-definition">
+        <put-attribute name="title" value="My Grades"/>
+        <put-attribute name="body" value="/WEB-INF/views/myGrades.jsp"/>
+    </definition>
+
 </tiles-definitions>

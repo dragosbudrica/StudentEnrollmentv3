@@ -1,6 +1,7 @@
 package com.kepler.rominfo.service;
 
 import com.kepler.rominfo.mappers.EnrollmentMapper;
+import com.kepler.rominfo.mappers.UserMapper;
 import com.kepler.rominfo.model.Course;
 import com.kepler.rominfo.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class EnrollmentService {
     private EnrollmentMapper enrollmentMapper;
+    private UserMapper userMapper;
 
     @Autowired
-    public EnrollmentService(EnrollmentMapper enrollmentMapper) {
+    public EnrollmentService(EnrollmentMapper enrollmentMapper, UserMapper userMapper) {
         this.enrollmentMapper = enrollmentMapper;
+        this.userMapper = userMapper;
     }
 
     @Transactional
@@ -30,5 +33,15 @@ public class EnrollmentService {
                 return true;
         }
         return false;
+    }
+
+    public void editMark(long courseCode, long userId, int mark) {
+        Student student = userMapper.findStudentByUserId(userId);
+        enrollmentMapper.editMark(courseCode, student.getStudentId(), mark);
+    }
+
+    public void removeMark(long courseCode, long userId) {
+        Student student = userMapper.findStudentByUserId(userId);
+        enrollmentMapper.removeMark(courseCode, student.getStudentId());
     }
 }

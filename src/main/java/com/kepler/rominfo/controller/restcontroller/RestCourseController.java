@@ -35,7 +35,7 @@ public class RestCourseController {
             List<Course> courses = courseService.getAllCourses();
 
             for (Course currentCourse : courses) {
-                CourseDto courseDto = setCourseDtoProperties(currentCourse);
+                CourseDto courseDto = courseService.putCourseDtoProperties(currentCourse);
                 allCourses.add(courseDto);
             }
         } catch (Exception ex) {
@@ -52,7 +52,7 @@ public class RestCourseController {
             List<Course> courses = courseService.getProfessorCourses(user.getEmail());
 
             for (Course currentCourse : courses) {
-                CourseDto courseDto = setCourseDtoProperties(currentCourse);
+                CourseDto courseDto = courseService.putCourseDtoProperties(currentCourse);
                 professorCourses.add(courseDto);
             }
         } catch (Exception ex) {
@@ -69,7 +69,7 @@ public class RestCourseController {
             List<Course> courses = courseService.getStudentCourses(user.getEmail());
 
             for (Course currentCourse : courses) {
-                CourseDto courseDto = setCourseDtoProperties(currentCourse);
+                CourseDto courseDto = courseService.putCourseDtoProperties(currentCourse);
                 studentCourses.add(courseDto);
             }
         } catch (Exception ex) {
@@ -119,16 +119,4 @@ public class RestCourseController {
         }
         return result;
     }
-
-
-    private CourseDto setCourseDtoProperties(Course course) {
-        CourseDto courseDto = new CourseDto();
-        courseDto.setCourseCode(course.getCourseCode());
-        courseDto.setCourseName(course.getCourseName());
-        courseDto.setCategory(course.getCategory().getCategoryName());
-        courseDto.setProfessor(course.getUser().getFullName());
-        return courseDto;
-    }
-
-
 }

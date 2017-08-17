@@ -1,8 +1,10 @@
+var StudentCourses = StudentCourses || {};
+
 $(document).ready(function () {
-    getStudentCourses();
+    StudentCourses.getStudentCourses();
 });
 
-function getStudentCourses() {
+StudentCourses.getStudentCourses = function getStudentCourses() {
     var warning = $("#warning");
     $.ajax({
         url: '/getStudentCourses',
@@ -14,18 +16,18 @@ function getStudentCourses() {
                 $(warning).find('h1').text("You aren't enrolled to any course yet!");
                 warning.show();
             } else {
-                Enrollment.sortCourseAscending(data);
-                renderCourses(data);
-                Enrollment.prepareDisplayCourseDetails();
+                Utils.sortCourseAscending(data);
+                StudentCourses.renderCourses(data);
+                Utils.prepareDisplayCourseDetails();
             }
         },
         error: function (data) {
             console.log(data);
         }
     });
-}
+};
 
-function renderCourses(data) {
+StudentCourses.renderCourses = function renderCourses(data) {
     var tbodyCourses = $('#tbodyCourses');
     var paginationCourses = $('#paginationCourses');
     var tr;
@@ -37,31 +39,9 @@ function renderCourses(data) {
         tbodyCourses.append(tr);
     }
     $('#studentCourses').show();
-    Enrollment.pagination(tbodyCourses, paginationCourses);
-}
+    Utils.pagination(tbodyCourses, paginationCourses);
+};
 
-function displayCourseDetailsStudent(data, courseName) {
-    var tbodyLectures = $("#tbodyLectures");
-    var paginationLectures = $('#paginationLectures');
-    tbodyLectures.empty();
-    paginationLectures.empty();
-    $('#courseName').text(courseName);
-    var tr;
-    for (var i = 0; i < data.length; i++) {
-        var item = data[i];
-        tr = $('<tr/>');
-        if (item.attachment === null) {
-            tr.append("<td>" + item.name + "</td>");
-            tr.append("<td>No PDF</td>");
-            $('#tbodyLectures').append(tr);
-        } else if (item.attachment !== null) {
-            tr.append("<td>" + item.name + "</td>");
-            tr.append("<td><a href=\"/download/"+item.lectureId+"\"><img src=\"/resources/images/rsz_download-pdf.png\"/></a></td>");
-            tbodyLectures.append(tr);
-        }
-    }
-    $("#courseDetails").show();
-    Enrollment.pagination(tbodyLectures, paginationLectures);
-}
+
 
 

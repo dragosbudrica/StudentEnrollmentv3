@@ -192,4 +192,18 @@ public class CourseService {
     public void deleteCourse(long courseCode) {
         courseMapper.deleteCourse(courseCode);
     }
+
+    public List<Course> getProfessorCoursesWithEnrolledStudents(String email) {
+        Professor professor = userMapper.findProfessorByEmail(email);
+        return courseMapper.getCoursesWithEnrolledStudents(professor.getProfessorId());
+    }
+
+    public CourseDto putCourseDtoProperties(Course course) {
+        CourseDto courseDto = new CourseDto();
+        courseDto.setCourseCode(course.getCourseCode());
+        courseDto.setCourseName(course.getCourseName());
+        courseDto.setCategory(course.getCategory().getCategoryName());
+        courseDto.setProfessor(course.getUser().getFullName());
+        return courseDto;
+    }
 }

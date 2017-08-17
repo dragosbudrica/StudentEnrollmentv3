@@ -1,9 +1,11 @@
+var NewAccount = NewAccount || {};
+
 $(document).ready(function () {
-    checkFields();
-    createAccount();
+    NewAccount.checkFields();
+    NewAccount.prepareAccountCreation();
 });
 
-function checkFields() {
+NewAccount.checkFields = function checkFields() {
     // First Name can't be blank
     $('#newAccount_firstName').on('input', function () {
         var input = $(this);
@@ -39,7 +41,7 @@ function checkFields() {
     // SSN must be valid
     $('#newAccount_ssn').on('input', function () {
         var input = $(this);
-        var isSsn = checkSsn(input.val());
+        var isSsn = NewAccount.checkSsn(input.val());
         if (isSsn) {
             input.removeClass("invalid").addClass("valid");
             if (input.next().hasClass("error_show")) {
@@ -84,9 +86,9 @@ function checkFields() {
             input.next().removeClass("error").addClass("error_show");
         }
     });
-}
+};
 
-function checkSsn(cnp) {
+NewAccount.checkSsn = function checkSsn(cnp) {
     if (cnp.length < 13 || cnp.length > 13 || isNaN(cnp))
         return false;
     else {
@@ -112,9 +114,9 @@ function checkSsn(cnp) {
 
         return valid;
     }
-}
+};
 
-function createAccount() {
+NewAccount.prepareAccountCreation = function prepareAccountCreation() {
     $('#submit').click(function (event) {
             var form_data = $("#newAccount input[type=text], input[type=password]").serializeArray();
             var error_free = true;
@@ -141,39 +143,43 @@ function createAccount() {
                 var password = $('#newAccount_password').val();
                 var role = $('#role').val();
 
-                var jsonParams = JSON.stringify({
-                    'firstName': firstName,
-                    'lastName': lastName,
-                    'ssn': ssn,
-                    'email': email,
-                    'password': password,
-                    'role': role
-                });
-
-                $.ajax({
-                    url: '/addNewAccount',
-                    type: 'POST',
-                    data: jsonParams,
-                    contentType: 'application/json',
-                    success: function (data) {
-                        var message = $('#message');
-                        if (data === "Account creation successful!") {
-                            message.text("Account Creation Successful!");
-                            message.css('color', 'green');
-                            message.fadeIn('slow');
-                            message.fadeOut('slow');
-                        }
-                        else {
-                            message.text(data);
-                            message.css('color', 'red');
-                            message.fadeIn('slow');
-                            message.fadeOut('slow');
-                        }
-                    },
-                    error: function (data) {
-                        console.log(data);
-                    }
-                });
+                NewAccount.sendCreateAccountAjax(firstName, lastName, ssn, email, password, role);
             }
         });
-}
+};
+
+NewAccount.sendCreateAccountAjax = function sendCreateAccountAjax(firstName, lastName, ssn, email, password, role) {
+    var jsonParams = JSON.stringify({
+        'firstName': firstName,
+        'lastName': lastName,
+        'ssn': ssn,
+        'email': email,
+        'password': password,
+        'role': role
+    });
+
+    $.ajax({
+        url: '/addNewAccount',
+        type: 'POST',
+        data: jsonParams,
+        contentType: 'application/json',
+        success: function (data) {
+            var message = $('#message');
+            if (data === "Account creation successful!") {
+                message.text("Account Creation Successful!");
+                message.css('color', 'green');
+                message.fadeIn('slow');
+                message.fadeOut('slow');
+            }
+            else {
+                message.text(data);
+                message.css('color', 'red');
+                message.fadeIn('slow');
+                message.fadeOut('slow');
+            }
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+};

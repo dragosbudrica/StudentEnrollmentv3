@@ -1,5 +1,6 @@
 package com.kepler.rominfo.mappers;
 import com.kepler.rominfo.model.Course;
+import com.kepler.rominfo.model.Student;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,7 @@ public interface CourseMapper {
     List<Course> getStudentCourses(@Param("studentId") long studentId);
     List<Course> getStudentCoursesWithDates(@Param("studentId") long studentId);
     List<Course> getProfessorCourses(@Param("professorId") long professorId);
+    List<Course> getCoursesWithEnrolledStudents(@Param("professorId") long professorId);
     List<Course> getOnlyCoursesWithDates();
     Course getCourseByName(@Param("courseName") String courseName);
     void updateCourseSchedule(@Param("courseName") String courseName, @Param("startTime") Date startTime);

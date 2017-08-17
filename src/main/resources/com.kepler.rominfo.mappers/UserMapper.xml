@@ -12,6 +12,8 @@
         <result property="email" column="email"/>
         <result property="password" column="password"/>
         <result property="role" column="role"/>
+        <result property="mark" column="mark"/>
+        <result property="validated" column="validated"/>
     </resultMap>
 
     <resultMap type="Student" id="StudentResult">
@@ -23,68 +25,100 @@
     </resultMap>
 
     <select id="getAllUsers" resultMap="UserResult">
-        SELECT u."userid" AS userId,
-        u."firstname" AS firstName,
-        u."lastname" AS lastName,
-        u."ssn" AS ssn,
-        u."email" AS email,
-        u."password" AS password,
-        u."role" AS role
+        SELECT
+            u."userid"    AS userId,
+            u."firstname" AS firstName,
+            u."lastname"  AS lastName,
+            u."ssn"       AS ssn,
+            u."email"     AS email,
+            u."password"  AS password,
+            u."role"      AS role
         FROM public."user" u
     </select>
 
     <select id="getUserById" resultMap="UserResult">
-        SELECT u."userid" AS userId,
-        u."firstname" AS firstName,
-        u."lastname" AS lastName,
-        u."ssn" AS ssn,
-        u."email" AS email,
-        u."password" AS password,
-        u."role" AS role
+        SELECT
+            u."userid"    AS userId,
+            u."firstname" AS firstName,
+            u."lastname"  AS lastName,
+            u."ssn"       AS ssn,
+            u."email"     AS email,
+            u."password"  AS password,
+            u."role"      AS role
         FROM public."user" u
-        WHERE u.userid=#{userId}
+        WHERE u.userid = #{userId}
     </select>
 
-    <insert id = "addUser">
-        insert into "user" (email, password, firstname, lastname, ssn, role)
-        VALUES (#{email},#{password},#{firstName},#{lastName},#{ssn},#{role});
+    <insert id="addUser">
+        INSERT INTO "user" (email, password, firstname, lastname, ssn, role)
+        VALUES (#{email}, #{password}, #{firstName}, #{lastName}, #{ssn}, #{role});
     </insert>
 
-    <insert id = "addStudent">
-        insert into "student" (userid)
+    <insert id="addStudent">
+        INSERT INTO "student" (userid)
         VALUES (#{userId});
     </insert>
 
-    <insert id = "addProfessor">
-        insert into "professor" (userid)
+    <insert id="addProfessor">
+        INSERT INTO "professor" (userid)
         VALUES (#{userId});
     </insert>
 
     <select id="findByEmail" resultMap="UserResult">
-        SELECT u."userid" AS userId,
-        u."firstname" AS firstName,
-        u."lastname" AS lastName,
-        u."ssn" AS ssn,
-        u."email" AS email,
-        u."password" AS password,
-        u."role" AS role
+        SELECT
+            u."userid"    AS userId,
+            u."firstname" AS firstName,
+            u."lastname"  AS lastName,
+            u."ssn"       AS ssn,
+            u."email"     AS email,
+            u."password"  AS password,
+            u."role"      AS role
         FROM public."user" u
-        WHERE u."email"=#{email}
+        WHERE u."email" = #{email}
     </select>
 
     <select id="findStudentByEmail" resultMap="StudentResult">
         SELECT s."studentid" AS studentId
         FROM public."student" s
+            INNER JOIN public."user" u
+                ON s.userid = u.userid
+        WHERE u."email" = #{email}
+    </select>
+
+    <select id="findStudentByUserId" resultMap="StudentResult">
+        SELECT s."studentid" AS studentId
+        FROM public."student" s
         INNER JOIN public."user" u
         ON s.userid = u.userid
-        WHERE u."email"=#{email}
+        WHERE u."userid" = #{userId}
     </select>
 
     <select id="findProfessorByEmail" resultMap="ProfessorResult">
         SELECT p."professorid" AS professorId
         FROM public."professor" p
-        INNER JOIN public."user" u
-        ON p.userid = u.userid
-        WHERE u."email"=#{email}
+            INNER JOIN public."user" u
+                ON p.userid = u.userid
+        WHERE u."email" = #{email}
+    </select>
+
+    <select id="getEnrolledStudents" resultMap="UserResult">
+        SELECT
+            u."userid"      AS userId,
+            u."firstname"   AS firstName,
+            u."lastname"    AS lastName,
+            u."ssn"         AS ssn,
+            u."email"       AS email,
+            u."password"    AS password,
+            u."role"        AS role,
+            e."mark"        AS mark,
+            e."isValidated" AS validated
+        FROM public."user" u
+            INNER JOIN student s
+                ON u.userid = s.userid
+            INNER JOIN enrollment e
+                ON s.studentid = e.studentid
+            INNER JOIN course c
+                ON e.coursecode = c.coursecode
+        WHERE c.coursecode = #{courseCode}
     </select>
 </mapper>

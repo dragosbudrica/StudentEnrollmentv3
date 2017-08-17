@@ -1,8 +1,10 @@
+var Timetable = Timetable || {};
+
 $(document).ready(function () {
-    getEvents();
+    Timetable.getEvents();
 });
 
-function getEvents() {
+Timetable.getEvents = function getEvents() {
     var index;
     var courses = [];
     $.ajax({
@@ -12,10 +14,10 @@ function getEvents() {
         traditional: true,
         success: function (data) {
             if(data.length > 0) {
-                for(index=0; index < data.length; ++index) {
+                for(index = 0; index < data.length; ++index) {
                     courses.push({'title' : data[index].courseName, 'start' : new Date(data[index].startTime), 'end': new Date(data[index].endTime)});
                 }
-                displayEvents(courses);
+                Timetable.displayEvents(courses);
             } else {
                 $("#calendar").hide();
                 $("#image").show();
@@ -25,9 +27,9 @@ function getEvents() {
             console.log(data);
         }
     });
-}
+};
 
-function displayEvents(courses) {
+Timetable.displayEvents = function displayEvents(courses) {
     $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
@@ -39,4 +41,4 @@ function displayEvents(courses) {
         eventLimit: true, // allow "more" link when too many events
         events:  courses
     });
-}
+};

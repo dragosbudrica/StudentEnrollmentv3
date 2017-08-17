@@ -10,6 +10,24 @@ public class User implements Serializable {
     private String email;
     private String password;
     private String role;
+    private long mark;
+    private boolean validated;
+
+    public long getMark() {
+        return mark;
+    }
+
+    public void setMark(long mark) {
+        this.mark = mark;
+    }
+
+    public boolean isValidated() {
+        return validated;
+    }
+
+    public void setValidated(boolean validated) {
+        this.validated = validated;
+    }
 
     public long getUserId() {
         return userId;

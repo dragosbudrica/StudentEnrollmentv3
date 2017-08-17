@@ -28,4 +28,8 @@ public interface UserMapper {
     Student findStudentByEmail(@Param("email") String email);
 
     Professor findProfessorByEmail(@Param("email") String email);
+
+    List<Student> getEnrolledStudents(@Param("courseCode") long courseCode);
+
+    Student findStudentByUserId(@Param("userId") long userId);
 }

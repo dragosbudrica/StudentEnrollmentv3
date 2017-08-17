@@ -15,12 +15,14 @@
                 <li><a href="/professorCourses">My Courses</a></li>
                 <li><a href="/newCourse">Add Course</a></li>
                 <li><a href="/timetable">Timetable</a></li>
+                <li><a href="/grades">Grades</a></li>
             </c:if>
 
             <c:if test="${role eq 'Student'}">
                 <li><a href="/allCourses">All Courses</a></li>
                 <li><a href="/studentCourses">My Courses</a></li>
                 <li><a href="/timetable">Timetable</a></li>
+                <li><a href="/myGrades">My Grades</a></li>
             </c:if>
         </ul>
     </nav>

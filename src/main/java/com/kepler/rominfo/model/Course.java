@@ -16,6 +16,15 @@ public class Course implements Serializable {
     private List<Lecture> lectures = new ArrayList<Lecture>();
     private long professorId;
     private long categoryId;
+    private int numberOfEnrolledStudents;
+
+    public int getNumberOfEnrolledStudents() {
+        return numberOfEnrolledStudents;
+    }
+
+    public void setNumberOfEnrolledStudents(int numberOfEnrolledStudents) {
+        this.numberOfEnrolledStudents = numberOfEnrolledStudents;
+    }
 
     public long getCategoryId() {
         return categoryId;

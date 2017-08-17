@@ -47,4 +47,18 @@
         values (#{studentId},#{courseCode})
     </insert>
 
+    <update id="editMark">
+        UPDATE public."enrollment"
+        SET "mark" = #{mark}
+        WHERE "coursecode" = #{courseCode}
+        AND "studentid" = #{studentId}
+    </update>
+
+    <update id="removeMark">
+        UPDATE public."enrollment"
+        SET "mark" = NULL
+        WHERE "coursecode" = #{courseCode}
+        AND "studentid" = #{studentId}
+    </update>
+
 </mapper>

@@ -1,6 +1,6 @@
-var Enrollment = Enrollment || {};
+var Utils = Utils || {};
 
-Enrollment.countChar = function countChar(val) {
+Utils.countChar = function countChar(val) {
     var max = 255;
     var charNum = $('#charNum');
     var len = val.value.length;
@@ -14,13 +14,13 @@ Enrollment.countChar = function countChar(val) {
     }
 };
 
-Enrollment.sortCourseAscending = function sortCourseAscending(data) {
+Utils.sortCourseAscending = function sortCourseAscending(data) {
     data.sort(function (a, b) {
         return a.courseName.localeCompare(b.courseName);
     });
-}
+};
 
-Enrollment.pagination = function pagination(tbody, pagination) {
+Utils.pagination = function pagination(tbody, pagination) {
     var req_num_row = 5;
     var $tr = $(tbody).find('tr');
     var total_num_row = $tr.length;
@@ -56,18 +56,18 @@ Enrollment.pagination = function pagination(tbody, pagination) {
             $tr.eq(start + i).show();
         }
     });
-}
+};
 
-Enrollment.prepareDisplayCourseDetails = function prepareDisplayCourseDetails() {
+Utils.prepareDisplayCourseDetails = function prepareDisplayCourseDetails() {
     var tbody = $("#tbodyCourses");
     var spansCourseName = tbody.find("span[class=courseNameClass]");
 
     for (var i = 0; i < spansCourseName.length; i++) {
-        $(spansCourseName[i]).on("click", Enrollment.getCourseDetails);
+        $(spansCourseName[i]).on("click", Utils.getCourseDetails);
     }
-}
+};
 
-Enrollment.getCourseDetails = function getCourseDetails() {
+Utils.getCourseDetails = function getCourseDetails() {
     var courseCode = $(this).attr('data-courseCode');
     var courseName = $(this).text();
     var jsonParam = JSON.stringify({
@@ -80,22 +80,22 @@ Enrollment.getCourseDetails = function getCourseDetails() {
         data: jsonParam,
         contentType: "application/json",
         success: function (data) {
-            Enrollment.sortLectureAsceding(data, courseName, courseCode);
+            Utils.sortLectureAscending(data, courseName, courseCode);
         },
         error: function (data) {
             console.log(data);
         }
     });
-}
+};
 
-Enrollment.sortLectureAsceding = function sortLectureAsceding(data, courseName, courseCode) {
+Utils.sortLectureAscending = function sortLectureAscending(data, courseName, courseCode) {
     var reA = /[^a-zA-Z]/g;
     var reN = /[^0-9]/g;
 
     data.sort(function (a, b) {
         var aA = a.name.replace(reA, "");
         var bA = b.name.replace(reA, "");
-        if(aA === bA) {
+        if (aA === bA) {
             var aN = parseInt(a.name.replace(reN, ""), 10);
             var bN = parseInt(b.name.replace(reN, ""), 10);
             return aN === bN ? 0 : aN > bN ? 1 : -1;
@@ -103,11 +103,17 @@ Enrollment.sortLectureAsceding = function sortLectureAsceding(data, courseName, 
             return aA > bA ? 1 : -1;
         }
     });
-    if(role === "Professor") {
-        displayCourseDetailsProfessor(data, courseName, courseCode);
-    } else if(role === "Student") {
-        displayCourseDetailsStudent(data, courseName);
+    if (role === "Professor") {
+        Lectures.displayLecturesProfessor(data, courseName, courseCode);
+    } else if (role === "Student") {
+        Lectures.displayLecturesStudent(data, courseName);
     }
+};
+
+Utils.sortStudentsAscending = function sortStudentsAscending(data) {
+    data.sort(function (a, b) {
+        return a.lastName.localeCompare(b.lastName);
+    });
 }
 
 

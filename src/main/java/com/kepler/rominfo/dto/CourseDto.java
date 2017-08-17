@@ -15,6 +15,15 @@ public class CourseDto implements Serializable {
     private Date endTime;
     private String description;
     private int numberOfLectures;
+    private int numberOfEnrolledStudents;
+
+    public int getNumberOfEnrolledStudents() {
+        return numberOfEnrolledStudents;
+    }
+
+    public void setNumberOfEnrolledStudents(int numberOfEnrolledStudents) {
+        this.numberOfEnrolledStudents = numberOfEnrolledStudents;
+    }
 
     public CourseDto() {}
 

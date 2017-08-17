@@ -1,5 +1,5 @@
-table {
-    border-collapse: collapse;
+body {
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 table thead th {
@@ -9,31 +9,10 @@ table thead th {
     padding: 4px 30px 4px 8px;
 }
 
-table td {
-    border: 1px solid #e3e3e3;
-    padding: 4px 8px;
-}
-
 td span {
     cursor:pointer;
 }
 
-table tfoot {
-    text-align: left;
-    background-color: #3a6070;
-    color: #FFF;
-    padding: 4px 30px 4px 8px;
-}
-
-table tr:nth-child(odd) td {
-    background-color: #e7edf0;
-}
-
-#paginationCourses a {
-    display:inline-block;
-    margin-right:5px;
-
-}
 
 #paginationLectures a {
     display:inline-block;

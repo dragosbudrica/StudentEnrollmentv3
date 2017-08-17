@@ -22,6 +22,7 @@
         <result property="numberOfLectures" column="numberoflectures"/>
         <result property="startTime" column="starttime"/>
         <result property="endTime" column="endtime"/>
+        <result property="numberOfEnrolledStudents" column="numberOfEnrolledStudents"/>
         <association property="user" resultMap="UserResult" columnPrefix="user_"/>
         <association property="category" resultMap="CategoryResult" columnPrefix="cat_"/>
     </resultMap>
@@ -65,6 +66,8 @@
                 ON c.categoryid = cat.categoryid
         WHERE c."coursename" = #{courseName}
     </select>
+
+
 
     <select id="getAllCourses" resultMap="CourseResult">
         SELECT
@@ -162,6 +165,28 @@
         WHERE p."professorid" = #{professorId}
     </select>
 
+    <select id="getCoursesWithEnrolledStudents" resultMap="CourseResult">
+        SELECT
+        c."coursecode"   AS courseCode,
+        c."coursename"   AS courseName,
+        cat."categoryid" AS cat_categoryid,
+        cat."categoryname" AS cat_categoryname,
+        u."firstname"    AS user_firstname,
+        u."lastname"     AS user_lastname,
+        u."userid"       AS user_userid,
+        (SELECT COUNT(e.coursecode) FROM enrollment e WHERE c.coursecode = e.coursecode) AS numberOfEnrolledStudents
+        FROM public."course" c
+        INNER JOIN public."category" cat
+        ON c.categoryid = cat.categoryid
+        INNER JOIN professor p
+        ON c.professorid = p.professorId
+        INNER JOIN public."user" u
+        ON p.userid = u.userid
+        WHERE p."professorid" = #{professorId}
+    </select>
+
+
+
     <update id="updateCourseSchedule">
         UPDATE public."course"
         SET
@@ -193,5 +218,7 @@
         DELETE FROM public."course"
         WHERE "coursecode" = #{courseCode};
     </delete>
+
+
 
 </mapper>

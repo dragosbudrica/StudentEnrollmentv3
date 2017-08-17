@@ -1,28 +1,43 @@
-var events = [];
+var CourseScheduling = CourseScheduling || {};
+CourseScheduling.events = [];
+
 $(document).ready(function () {
-    getEvents();
-    checkEventContentDialogActions();
-    checkConfirmationDialogActions();
+    CourseScheduling.getEvents();
+    CourseScheduling.checkEventContentDialogActions();
+    CourseScheduling.checkConfirmationDialogActions();
 });
 
-function getEvents() {
-    var index;
+CourseScheduling.getEvents = function getEvents() {
     $.ajax({
         url: '/getCourseEvents',
         type: 'GET',
         dataType: 'json',
         traditional: true,
         success: function (data) {
-            events = buildEvents(data);
-            displayEvents(events);
+            CourseScheduling.events = CourseScheduling.buildEvents(data);
+            CourseScheduling.displayEvents(CourseScheduling.events);
         },
         error: function (data) {
             console.log(data);
         }
     });
-}
+};
 
-function getCourseTitles() {
+CourseScheduling.buildEvents = function buildEvents(dataEvents) {
+    var events = [];
+    for (index = 0; index < dataEvents.length; ++index) {
+        var startDate = new Date(dataEvents[index].startTime);
+        var endDate = new Date(dataEvents[index].startTime);
+        events.push({
+            'title': dataEvents[index].courseName,
+            'start': startDate,
+            'end': endDate
+        });
+    }
+    return events;
+};
+
+CourseScheduling.getCourseTitles = function getCourseTitles() {
     $.ajax({
         url: '/getCourseTitles',
         type: 'GET',
@@ -39,10 +54,10 @@ function getCourseTitles() {
             console.log(data);
         }
     });
-}
+};
 
 
-function displayEvents(events) {
+CourseScheduling.displayEvents = function displayEvents(events) {
     $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
@@ -55,21 +70,21 @@ function displayEvents(events) {
         events: events,
         eventClick: function (event, element) {
             $("#startTime").val(event.start._i);
-            getCourseTitles();
+            CourseScheduling.getCourseTitles();
             $(".cover").fadeIn('slow');
             $("#eventContent").fadeIn('slow');
         },
         dayClick: function (date, jsEvent, view) {
-            var formattedDate = formatDateTime(date);
+            var formattedDate = CourseScheduling.formatDateTime(date);
             $("#startTime").val(formattedDate);
-            getCourseTitles();
+            CourseScheduling.getCourseTitles();
             $(".cover").fadeIn('slow');
             $("#eventContent").fadeIn('slow');
         }
     });
-}
+};
 
-function checkEventContentDialogActions() {
+CourseScheduling.checkEventContentDialogActions = function checkEventContentDialogActions() {
     $("#eventContent").on('click', function () {
         if ($(event.target).is(".close")) {
             $(".cover").fadeOut('slow');
@@ -80,22 +95,22 @@ function checkEventContentDialogActions() {
             $("#confirmDialog").fadeIn('slow');
         }
     });
-}
+};
 
-function checkConfirmationDialogActions() {
+CourseScheduling.checkConfirmationDialogActions = function checkConfirmationDialogActions() {
     $("#confirmDialog").on('click', function () {
         if ($(event.target).is(".close") || $(event.target).is(".cancel")) {
             $(".cover").fadeOut('slow');
             $("#confirmDialog").fadeOut('slow');
             $('#courseName').empty();
         } else if($(event.target).is("#schedule")) {
-            schedule();
+            CourseScheduling.schedule();
         }
     });
-}
+};
 
 
-function formatDateTime(date) {
+CourseScheduling.formatDateTime = function formatDateTime(date) {
     var month, day, hours, minutes, seconds;
     if (date._d.getMonth() < 9)
         month = "0" + (date._d.getMonth() + 1);
@@ -117,15 +132,14 @@ function formatDateTime(date) {
         seconds = "0" + date._d.getSeconds();
 
     return date._d.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds;
-}
+};
 
-function schedule() {
+CourseScheduling.schedule = function schedule() {
     var jsonParam = JSON.stringify({
         'courseName': $('#courseName').find('option:selected').text(),
         'startTime': $('#startTime').val()
     });
 
-    console.log(jsonParam);
     var message = $('#message');
     var calendar = $('#calendar');
     $.ajax({
@@ -142,7 +156,7 @@ function schedule() {
                 message.css('color', 'green');
                 message.fadeIn('slow');
                 message.fadeOut('slow');
-                events = buildEvents(data);
+                CourseScheduling.events = CourseScheduling.buildEvents(data);
                 calendar.fullCalendar('removeEvents');
                 calendar.fullCalendar('addEventSource', events);
                 calendar.fullCalendar('rerenderEvents' );
@@ -165,20 +179,8 @@ function schedule() {
             $('#courseName').empty();
         }
     });
-}
+};
 
-function buildEvents(dataEvents) {
-    var events = [];
-    for (index = 0; index < dataEvents.length; ++index) {
-        var startDate = new Date(dataEvents[index].startTime);
-        var endDate = new Date(dataEvents[index].startTime);
-        events.push({
-            'title': dataEvents[index].courseName,
-            'start': startDate,
-            'end': endDate
-        });
-    }
-    return events;
-}
+
 
 

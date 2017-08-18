@@ -78,3 +78,8 @@ p {
     display: none;
     text-align: center;
 }
+
+#warning {
+    display: none;
+    color: red;
+}

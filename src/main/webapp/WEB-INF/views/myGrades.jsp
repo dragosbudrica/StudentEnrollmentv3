@@ -6,6 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
+<jsp:useBean id="cons" class="com.kepler.rominfo.utils.Constants"/>
+<script>
+    var noGrade = '${cons.NO_GRADE}';
+</script>
+<!DOCTYPE html>
 <html>
 <head>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

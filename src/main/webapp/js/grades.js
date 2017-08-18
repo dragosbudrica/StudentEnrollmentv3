@@ -87,7 +87,7 @@ Grades.renderStudents = function renderStudents(data) {
         mark = data[i].mark;
         validated = data[i].validated;
         if (mark === 0) {
-            mark = "No grade";
+            mark = noGrade;
         }
         tr.append("<td>" + (i + 1) + "</td>");
         tr.append("<td>" + data[i].lastName + "</td>");
@@ -296,7 +296,7 @@ Grades.sendRemovalAjax = function sendRemovalAjax(courseCode, userId) {
         traditional: true,
         success: function (data) {
            var mark = $('#tbodyGrades').find("button[data-userId="+userId+"]").parent().parent().children(':nth-child(4)').find('span');
-           $(mark).text('No grade');
+           $(mark).text(noGrade);
             $(".cover").fadeOut('slow');
             $("#removeDialog").fadeOut('slow');
         },

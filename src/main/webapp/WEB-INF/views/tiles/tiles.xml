@@ -65,4 +65,9 @@
         <put-attribute name="body" value="/WEB-INF/views/myGrades.jsp"/>
     </definition>
 
+    <definition name="validation" extends="base-definition">
+        <put-attribute name="title" value="Validation"/>
+        <put-attribute name="body" value="/WEB-INF/views/validation.jsp"/>
+    </definition>
+
 </tiles-definitions>

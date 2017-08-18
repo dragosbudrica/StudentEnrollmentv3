@@ -42,7 +42,7 @@ MyGrades.renderCourses = function renderCourses(data) {
         if(validated) {
             tr.append("<td>" + data[i].mark + "</td>");
         } else {
-            tr.append("<td>No Grade</td>");
+            tr.append("<td>" + noGrade + "</td>");
         }
         tbodyCourses.append(tr);
     }

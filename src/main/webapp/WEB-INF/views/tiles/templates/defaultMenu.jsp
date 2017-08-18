@@ -9,6 +9,7 @@
             <c:if test="${role eq 'Admin'}">
                 <li><a href="/newAccount">New Account</a></li>
                 <li><a href="/courseScheduling">Scheduling</a></li>
+                <li><a href="/validation">Validation</a></li>
             </c:if>
 
             <c:if test="${role eq 'Professor'}">

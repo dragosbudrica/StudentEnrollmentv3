@@ -12,6 +12,10 @@
 <%@ page isELIgnored="false" %>
 <%@ page session="true" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:useBean id="cons" class="com.kepler.rominfo.utils.Constants"/>
+<script>
+    var noGrade = '${cons.NO_GRADE}';
+</script>
 <!DOCTYPE html>
 <html>
 <head>

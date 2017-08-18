@@ -16,4 +16,9 @@ public class GradeController {
     public String myGrades() {
         return "myGrades";
     }
+
+    @RequestMapping(value = "/validation", method = RequestMethod.GET)
+    public String validation() {
+        return "validation";
+    }
 }

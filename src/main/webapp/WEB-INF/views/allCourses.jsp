@@ -15,6 +15,10 @@
     <script type="text/javascript" src="/js/allCourses.js"></script>
 </head>
 <body>
+<div id="warning">
+    <img alt="" src="/resources/images/icon-warning-png-11.png"/>
+    <h1></h1>
+</div>
 <div id="allCourses">
     <h1>All Courses</h1>
     <table id="grid">
@@ -26,9 +30,13 @@
             <th></th>
         </tr>
         </thead>
+        <tfoot>
+        <tr>
+            <td colspan="4" id="paginationCourses"></td>
+        </tr>
+        </tfoot>
         <tbody id="tbodyCourses"></tbody>
     </table>
-    <div id="paginationCourses"></div>
     <div id="message"></div>
 </div>
 

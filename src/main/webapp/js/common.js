@@ -114,7 +114,7 @@ Utils.sortStudentsAscending = function sortStudentsAscending(data) {
     data.sort(function (a, b) {
         return a.lastName.localeCompare(b.lastName);
     });
-}
+};
 
 
 

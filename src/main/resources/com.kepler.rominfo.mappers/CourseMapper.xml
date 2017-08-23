@@ -22,7 +22,7 @@
         <result property="numberOfLectures" column="numberoflectures"/>
         <result property="startTime" column="starttime"/>
         <result property="endTime" column="endtime"/>
-        <result property="mark" column="mark"/>
+        <result property="result" column="result"/>
         <result property="validated" column="validated"/>
         <result property="numberOfEnrolledStudents" column="numberOfEnrolledStudents"/>
         <association property="user" resultMap="UserResult" columnPrefix="user_"/>
@@ -144,7 +144,7 @@
         u."firstname"  AS user_firstname,
         u."lastname"   AS user_lastname,
         u."userid"     AS user_userid,
-        e."mark" AS mark,
+        e."result" AS result,
         e."isValidated" AS validated
         FROM public."course" c
             INNER JOIN category cat

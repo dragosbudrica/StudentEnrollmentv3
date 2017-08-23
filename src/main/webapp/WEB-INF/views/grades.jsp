@@ -50,6 +50,10 @@
     </table>
 </div>
 
+<div id="warning2">
+    <h1></h1>
+</div>
+
 <div id="grades" data-courseCode="">
     <h3 id="courseTitle"></h3>
     <table id="gradesGrid">

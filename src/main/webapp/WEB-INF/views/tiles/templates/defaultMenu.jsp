@@ -1,7 +1,7 @@
 <%@ page isELIgnored="false" %>
 <%@ page session="true" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:set var="role" value="${sessionScope.user.role}"/>
+<c:set var="role" value="${sessionScope.user.role.roleName}"/>
 <c:if test="${not empty sessionScope.user}">
     <nav>
         <img class="logo" src="/resources/images/elearning.png"/>

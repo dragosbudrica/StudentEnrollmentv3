@@ -17,15 +17,15 @@ public class Course implements Serializable {
     private long professorId;
     private long categoryId;
     private int numberOfEnrolledStudents;
-    private int mark;
+    private String result;
     private boolean validated;
 
-    public int getMark() {
-        return mark;
+    public String getResult() {
+        return result;
     }
 
-    public void setMark(int mark) {
-        this.mark = mark;
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public boolean isValidated() {

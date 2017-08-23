@@ -69,27 +69,27 @@ public class RestGradeController {
         return students;
     }
 
-    @RequestMapping(value = "/editMark", method = RequestMethod.PUT)
+    @RequestMapping(value = "/editResult", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
-    public void editMark(@RequestBody Map<String, Object> params) {
+    public void editResult(@RequestBody Map<String, Object> params) {
         String courseCode = (String) params.get("courseCode");
         String userId = (String) params.get("userId");
-        String mark = (String) params.get("mark");
+        String result = (String) params.get("result");
         try {
-            enrollmentService.editMark(Long.parseLong(courseCode), Long.parseLong(userId), Integer.parseInt(mark));
+            enrollmentService.editResult(Long.parseLong(courseCode), Long.parseLong(userId), result);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    @RequestMapping(value = "/removeMark", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/removeResult", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void removeMark(@RequestBody Map<String, Object> params) {
+    public void removeResult(@RequestBody Map<String, Object> params) {
         String courseCode = (String) params.get("courseCode");
         String userId = (String) params.get("userId");
 
         try {
-            enrollmentService.removeMark(Long.parseLong(courseCode), Long.parseLong(userId));
+            enrollmentService.removeResult(Long.parseLong(courseCode), Long.parseLong(userId));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -104,7 +104,7 @@ public class RestGradeController {
 
             for (Course currentCourse : courses) {
                 CourseDto courseDto = courseService.putCourseDtoProperties(currentCourse);
-                courseDto.setMark(currentCourse.getMark());
+                courseDto.setResult(currentCourse.getResult());
                 courseDto.setValidated(currentCourse.isValidated());
                 studentCoursesWithGrades.add(courseDto);
             }
@@ -112,5 +112,31 @@ public class RestGradeController {
             ex.printStackTrace();
         }
         return studentCoursesWithGrades;
+    }
+
+    @RequestMapping(value = "/validate", method = RequestMethod.PUT)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void validate(@RequestBody Map<String, Object> params) {
+        String courseCode = (String) params.get("courseCode");
+        List userIds = (List) params.get("userIds");
+
+        try {
+            enrollmentService.validateStudentsGrades(Long.parseLong(courseCode), userIds);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "/invalidate", method = RequestMethod.PUT)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void invalidate(@RequestBody Map<String, Object> params) {
+        String courseCode = (String) params.get("courseCode");
+        List userIds = (List) params.get("userIds");
+
+        try {
+            enrollmentService.invalidateStudentsGrades(Long.parseLong(courseCode), userIds);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

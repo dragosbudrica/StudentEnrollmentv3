@@ -30,17 +30,17 @@ MyGrades.renderCourses = function renderCourses(data) {
     var tbodyCourses = $('#tbodyCourses');
     var paginationCourses = $('#paginationCourses');
     var tr;
-    var mark;
+    var result;
     var validated;
     for (var i = 0; i < data.length; i++) {
         tr = $('<tr/>');
-        mark = data[i].mark;
+        result = data[i].result;
         validated = data[i].validated;
         tr.append("<td>" + data[i].courseName + "</td>");
         tr.append("<td>" + data[i].category + "</td>");
         tr.append("<td>" + data[i].professor + "</td>");
         if(validated) {
-            tr.append("<td>" + data[i].mark + "</td>");
+            tr.append("<td>" + result + "</td>");
         } else {
             tr.append("<td>" + noGrade + "</td>");
         }

@@ -53,10 +53,11 @@ Grades.prepareDisplayCourseStudents = function prepareDisplayCourseStudents() {
 Grades.getEnrolledStudents = function getEnrolledStudents() {
     $('#tbodyGrades').empty();
     $('#paginationGrades').empty();
-
+    var grades = $('#grades');
+    var warning2 = $('#warning2');
     var courseCode = $(this).attr('data-courseCode');
     $('#courseTitle').text($(this).text());
-    $('#grades').attr('data-courseCode', courseCode);
+    grades.attr('data-courseCode', courseCode);
 
     var jsonParam = JSON.stringify({
         'courseCode': courseCode
@@ -67,8 +68,15 @@ Grades.getEnrolledStudents = function getEnrolledStudents() {
         data: jsonParam,
         contentType: "application/json",
         success: function (data) {
-            Utils.sortStudentsAscending(data);
-            Grades.renderStudents(data);
+            if(data.length === 0) {
+                grades.hide();
+                $(warning2).find('h1').text("There are no enrolled students at this course yet!");
+                warning2.show();
+            } else {
+                warning2.hide();
+                Utils.sortStudentsAscending(data);
+                Grades.renderStudents(data);
+            }
         },
         error: function (data) {
             console.log(data);
@@ -80,21 +88,21 @@ Grades.renderStudents = function renderStudents(data) {
     var tbodyGrades = $('#tbodyGrades');
     var paginationGrades = $('#paginationGrades');
     var tr;
-    var mark;
+    var result;
     var validated;
     for (var i = 0; i < data.length; i++) {
         tr = $('<tr/>');
-        mark = data[i].mark;
+        result = data[i].result;
         validated = data[i].validated;
-        if (mark === 0) {
-            mark = noGrade;
+        if (result === null) {
+            result = noGrade;
         }
         tr.append("<td>" + (i + 1) + "</td>");
         tr.append("<td>" + data[i].lastName + "</td>");
         tr.append("<td>" + data[i].firstName + "</td>");
-        tr.append("<td><span>" + mark + "</span><select class=\"mark\" name=\"mark\"></select></td>");
+        tr.append("<td><span>" + result + "</span><select class=\"result\" name=\"result\"></select></td>");
         if (!validated) {
-            tr.append("<td><button class=\"editMark saveMark\" data-userId="+ data[i].userId +" ><img src=\"/resources/images/rsz_rsz_edit-pencil-_write_-128.png\"></button></td>");
+            tr.append("<td><button class=\"editResult saveResult\" data-userId="+ data[i].userId +" ><img src=\"/resources/images/rsz_rsz_edit-pencil-_write_-128.png\"></button></td>");
             tr.append("<td><button class=\"remove cancelEditing\" data-userId="+ data[i].userId +"><img src=\"/resources/images/rsz_rsz_61848.png\"></button></td>");
         }
         tbodyGrades.append(tr);
@@ -109,28 +117,28 @@ Grades.renderStudents = function renderStudents(data) {
 
 Grades.prepareEditing = function prepareEditing() {
     var tbody = $("#tbodyGrades");
-    var editButtons = $(tbody).find("button[class^=editMark]");
+    var editButtons = $(tbody).find("button[class^=editResult]");
 
     for (var i = 0; i < editButtons.length; i++) {
-        $(editButtons[i]).on("click", Grades.editMark);
+        $(editButtons[i]).on("click", Grades.editResult);
     }
 };
 
-Grades.editMark = function editMark() {
-    // add edit class on mark td
-    if ($(this).hasClass('editMark')) {
-        Grades.fillDropdownWithMarks(this);
+Grades.editResult = function editResult() {
+    // add edit class on result td
+    if ($(this).hasClass('editResult')) {
+        Grades.fillDropdownWithResults(this);
     }
     else {
-        Grades.updateMark(this);
+        Grades.updateResult(this);
     }
 };
 
-Grades.updateMark = function updateMark(saveButton) {
+Grades.updateResult = function updateResult(saveButton) {
     // set span based on option value
-    var markDropDown = $(saveButton).parent().parent().children(':nth-child(4)').find('select');
-    var spanMarkToEdit = $(markDropDown).prev();
-    $(spanMarkToEdit).text($(markDropDown).val());
+    var resultDropDown = $(saveButton).parent().parent().children(':nth-child(4)').find('select');
+    var spanResultToEdit = $(resultDropDown).prev();
+    $(spanResultToEdit).text($(resultDropDown).val());
 
     $(saveButton).parent().parent().children(":nth-child(4)").removeClass("edit");
 
@@ -139,11 +147,14 @@ Grades.updateMark = function updateMark(saveButton) {
     Grades.sendEditingAjax(saveButton);
 };
 
-Grades.fillDropdownWithMarks = function fillDropdownWithMarks(editButton) {
+Grades.fillDropdownWithResults = function fillDropdownWithResults(editButton) {
     var dropDown = $(editButton).parent().parent().children(":nth-child(4)");
+    var absent = "<option value=\"Absent\">Absent</option>";
+    $(absent).appendTo('.result');
+
     for (index = 1; index <= 10; ++index) {
-        var mark = "<option value=" + index + ">" + index + "</option>";
-        $(mark).appendTo('.mark');
+        var result = "<option value=" + index + ">" + index + "</option>";
+        $(result).appendTo('.result');
     }
     $(dropDown).addClass("edit");
     var select = $(dropDown).find("select");
@@ -155,7 +166,7 @@ Grades.fillDropdownWithMarks = function fillDropdownWithMarks(editButton) {
 Grades.toggleClassesAndIcons = function toggleClassesAndIcons(button) {
     // toggle classes
     var removeCancelButton = $(button).parent().next().children(":first-child");
-    $(button).toggleClass('editMark');
+    $(button).toggleClass('editResult');
     removeCancelButton.toggleClass('remove');
 
     // change icons
@@ -168,7 +179,7 @@ Grades.toggleClassesAndIcons = function toggleClassesAndIcons(button) {
 Grades.disableTheOtherButtons = function disableTheOtherButtons() {
     // disable the other buttons
     var tBodyGrades = $('#tbodyGrades');
-    var otherEditButtons = tBodyGrades.find("button[class^=editMark]");
+    var otherEditButtons = tBodyGrades.find("button[class^=editResult]");
     var otherRemoveButtons = tBodyGrades.find("button[class^=remove]");
 
     for (var i = 0; i < otherEditButtons.length; i++) {
@@ -183,14 +194,14 @@ Grades.toggleClassesAndIconsBackToNormal = function toggleClassesAndIconsBackToN
     if ($(button).parent().next('td').length === 0) {
         editSaveButton = $(button).parent().prev().children(":first-child");
         $(button).removeClass('cancelEditing').addClass('remove cancelEditing');
-        editSaveButton.removeClass('saveMark').addClass('editMark saveMark');
+        editSaveButton.removeClass('saveResult').addClass('editResult saveResult');
 
         // change icons
         $(button).children(":first-child").attr("src", "/resources/images/rsz_rsz_61848.png");
         editSaveButton.find("img").attr("src", "/resources/images/rsz_rsz_edit-pencil-_write_-128.png");
     } else {
         removeCancelButton = $(button).parent().next().children(":first-child");
-        $(button).removeClass('saveMark').addClass('editMark saveMark');
+        $(button).removeClass('saveResult').addClass('editResult saveResult');
         removeCancelButton.removeClass('cancelEditing').addClass('remove cancelEditing');
 
         // change icons
@@ -209,19 +220,19 @@ Grades.enableTheOtherButtons = function enableTheOtherButtons() {
 };
 
 Grades.sendEditingAjax = function sendEditingAjax(saveButton) {
-    var spanMark = $(saveButton).parent().parent().children(':nth-child(4)').find('span');
+    var spanResult = $(saveButton).parent().parent().children(':nth-child(4)').find('span');
     var jsonParams = JSON.stringify({
         'courseCode': $('#grades').attr('data-courseCode'),
         'userId': $(saveButton).attr('data-userId'),
-        'mark': $(spanMark).text()
+        'result': $(spanResult).text()
     });
 
     // empty the list
-    $('.mark').empty();
+    $('.result').empty();
 
     // send request
     $.ajax({
-        url: '/editMark',
+        url: '/editResult',
         type: 'PUT',
         data: jsonParams,
         contentType: 'application/json',
@@ -242,7 +253,7 @@ Grades.cancelEditing = function cancelEditing(cancelButton) {
     Grades.enableTheOtherButtons();
 
     // empty the list
-    $('.mark').empty();
+    $('.result').empty();
 };
 
 Grades.prepareRemoval = function prepareRemoval() {
@@ -250,13 +261,13 @@ Grades.prepareRemoval = function prepareRemoval() {
     var removeButtons = $(tbody).find("button[class^=remove]");
 
     for (var i = 0; i < removeButtons.length; i++) {
-        $(removeButtons[i]).on("click", Grades.removeMark);
+        $(removeButtons[i]).on("click", Grades.removeResult);
     }
 };
 
-Grades.removeMark = function removeMark() {
+Grades.removeResult = function removeResult() {
     var removeButton = $("#remove");
-    // remove mark
+    // remove result
     if ($(this).hasClass('remove')) {
         $(".cover").fadeIn('slow');
         $("#removeDialog").fadeIn('slow');
@@ -271,7 +282,7 @@ Grades.checkRemoveDialogActions = function checkRemoveDialogActions() {
     $("#removeDialog").on('click', function () {
         if ($(event.target).is(".close") || $(event.target).is(".cancel")) {
             $(".cover").fadeOut('slow');
-            $("#deleteDialog").fadeOut('slow');
+            $("#removeDialog").fadeOut('slow');
         } else if ($(event.target).is("#remove")) {
             var removeButton = $("#remove");
             var courseCode = removeButton.attr('data-courseCode');
@@ -289,14 +300,14 @@ Grades.sendRemovalAjax = function sendRemovalAjax(courseCode, userId) {
     });
 
     $.ajax({
-        url: '/removeMark',
+        url: '/removeResult',
         type: 'DELETE',
         data: jsonParams,
         contentType: 'application/json',
         traditional: true,
         success: function (data) {
-           var mark = $('#tbodyGrades').find("button[data-userId="+userId+"]").parent().parent().children(':nth-child(4)').find('span');
-           $(mark).text(noGrade);
+           var result = $('#tbodyGrades').find("button[data-userId="+userId+"]").parent().parent().children(':nth-child(4)').find('span');
+           $(result).text(noGrade);
             $(".cover").fadeOut('slow');
             $("#removeDialog").fadeOut('slow');
         },

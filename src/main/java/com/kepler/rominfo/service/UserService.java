@@ -1,7 +1,9 @@
 package com.kepler.rominfo.service;
 
+import com.kepler.rominfo.mappers.RoleMapper;
 import com.kepler.rominfo.mappers.UserMapper;
 import com.kepler.rominfo.model.Professor;
+import com.kepler.rominfo.model.Role;
 import com.kepler.rominfo.model.Student;
 import com.kepler.rominfo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +16,25 @@ import java.util.List;
 public class UserService {
 
     private UserMapper userMapper;
+    private RoleMapper roleMapper;
 
     @Autowired
-    public UserService(UserMapper userMapper) {
+    public UserService(UserMapper userMapper, RoleMapper roleMapper) {
         this.userMapper = userMapper;
+        this.roleMapper = roleMapper;
     }
 
 
     @Transactional
     public void addUser(String firstName, String lastName, long ssn, String email, String password, String role) {
         User user = new User();
+        long roleId = roleMapper.getRoleByName(role).getRoleId();
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setSsn(ssn);
         user.setEmail(email);
         user.setPassword(password);
-        user.setRole(role);
+        user.setRoleId(roleId);
         userMapper.addUser(user);
         if(role.equals("Student")) {
             User student = userMapper.findByEmail(email);

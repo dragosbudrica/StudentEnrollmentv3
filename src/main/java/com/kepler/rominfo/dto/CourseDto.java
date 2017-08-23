@@ -16,16 +16,16 @@ public class CourseDto implements Serializable {
     private String description;
     private int numberOfLectures;
     private int numberOfEnrolledStudents;
-    private int mark;
+    private String result;
     private boolean validated;
 
 
-    public int getMark() {
-        return mark;
+    public String getResult() {
+        return result;
     }
 
-    public void setMark(int mark) {
-        this.mark = mark;
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public boolean isValidated() {

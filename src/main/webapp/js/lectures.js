@@ -16,7 +16,7 @@ Lectures.displayLecturesProfessor = function displayLecturesProfessor(data, cour
             $(tbodyLectures).append(tr);
         } else if (item.attachment !== null) {
             tr.append("<td>" + item.name + "</td>");
-            tr.append("<td><a style='float:left' href=\"/download/"+item.lectureId+"\"><img src=\"/resources/images/rsz_download-pdf.png\"/></a>&nbsp;&nbsp;&nbsp;<button data-lectureId="+item.lectureId+" data-courseCode="+courseCode+" style=\"float:right\" onclick='removeAttachment(this)' type=\"button\" value=\"Upload\"><img src=\"/resources/images/rsz_rsz_2delete-2-xxl.png\"/></button></td>");
+            tr.append("<td><a style='float:left' href=\"/download/"+item.lectureId+"\"><img src=\"/resources/images/rsz_download-pdf.png\"/></a>&nbsp;&nbsp;&nbsp;<button data-lectureId="+item.lectureId+" data-courseCode="+courseCode+" style=\"float:right\" onclick='Lectures.removeAttachment(this)' type=\"button\" value=\"Upload\"><img src=\"/resources/images/rsz_rsz_2delete-2-xxl.png\"/></button></td>");
             tbodyLectures.append(tr);
         }
     }

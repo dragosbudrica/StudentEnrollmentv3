@@ -1,25 +1,40 @@
 package com.kepler.rominfo.filter;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.kepler.rominfo.mappers.AuthorizationMapper;
+import com.kepler.rominfo.mappers.ResourceMapper;
+import com.kepler.rominfo.model.Resource;
 import com.kepler.rominfo.model.User;
-import com.kepler.rominfo.utils.Authorization;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
 
 public class AuthenticationFilter implements Filter {
 
     private static final Log LOGGER = LogFactory.getLog(AuthenticationFilter.class);
 
-    private static final String LOGIN_PAGE = "/login.jsp";
-    private static final String UNAUTHORIZED = "/accessDenied.jsp";
+    private static final String LOGIN_PAGE = "/login";
+    private static final String UNAUTHORIZED = "/accessDenied";
 
-    private static Map<String, ArrayList<String>> rights = Authorization.getRights();
+    private AuthorizationMapper authorizationMapper;
+    private ResourceMapper resourceMapper;
+
+    @Autowired
+    public void setAuthorizationMapper(AuthorizationMapper authorizationMapper) {
+        this.authorizationMapper = authorizationMapper;
+    }
+
+    @Autowired
+    public void setResourceMapper(ResourceMapper resourceMapper) {
+        this.resourceMapper = resourceMapper;
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest,
@@ -29,57 +44,45 @@ public class AuthenticationFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
 
-        User user = (User) httpServletRequest
-                .getSession().getAttribute("user");
+        String resourceRequested = ((HttpServletRequest) servletRequest).getRequestURL().toString();
+        if (resourceRequested.contains("/login") || resourceRequested.contains("/doLogin") ||
+                resourceRequested.contains("css") || resourceRequested.contains("js") || resourceRequested.contains("resources")) {
+            filterChain.doFilter(servletRequest, servletResponse);
+        } else {
+            User user = (User) httpServletRequest
+                    .getSession().getAttribute("user");
 
-        if (user != null) {
-            LOGGER.debug("user is logged in");
-            // user is logged in, continue request
-            String pageRequested = ((HttpServletRequest) servletRequest).getRequestURL().toString();
-            LOGGER.info(user.getRole());
-            LOGGER.info(pageRequested);
+            if (user != null) {
+                LOGGER.debug("user is logged in");
+                // user is logged in, continue request
+                resourceRequested = ((HttpServletRequest) servletRequest).getRequestURL().toString();
+                String[] parts = resourceRequested.split("/");
+                Resource res = resourceMapper.getResourceByName(parts[parts.length-1]);
 
-            if (!isAuthorized(user, pageRequested)) {
+                if (!authorizationMapper.isAuthorized(user.getRole().getRoleId(), res.getResourceId())) {
+                    httpServletResponse.sendRedirect(
+                            httpServletRequest.getContextPath()
+                                    + UNAUTHORIZED);
+                } else {
+                    filterChain.doFilter(servletRequest, servletResponse);
+                }
+            } else {
+                LOGGER.debug("user is not logged in");
+                // user is not logged in, redirect to login page
                 httpServletResponse.sendRedirect(
                         httpServletRequest.getContextPath()
-                                + UNAUTHORIZED);
-            } else {
-                filterChain.doFilter(servletRequest, servletResponse);
+                                + LOGIN_PAGE);
             }
-        } else {
-            LOGGER.debug("user is not logged in");
-            // user is not logged in, redirect to login page
-            httpServletResponse.sendRedirect(
-                    httpServletRequest.getContextPath()
-                            + LOGIN_PAGE);
         }
     }
 
     @Override
     public void init(FilterConfig arg0) throws ServletException {
-        LOGGER.debug("LoginFilter initialized");
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
     @Override
     public void destroy() {
         // close resources
-    }
-
-    private boolean isAuthorized(User user, String pageRequested) {
-        boolean authorized = false;
-
-        outer:
-        for (Map.Entry<String, ArrayList<String>> entry : rights.entrySet()) {
-            String role = entry.getKey();
-            ArrayList<String> pages = entry.getValue();
-
-            for (String page : pages) {
-                if (role.equals(user.getRole()) && pageRequested.contains(page)) {
-                    authorized = true;
-                    break outer;
-                }
-            }
-        }
-        return authorized;
     }
 }

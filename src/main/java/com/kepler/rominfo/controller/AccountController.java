@@ -11,4 +11,9 @@ public class AccountController {
     public String newAccount() {
         return "newAccount";
     }
+
+    @RequestMapping(value = "/accessDenied", method = RequestMethod.GET)
+    public String accessDenied() {
+        return "accessDenied";
+    }
 }

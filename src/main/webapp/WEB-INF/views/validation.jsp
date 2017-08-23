@@ -45,6 +45,10 @@
     <div id="message"></div>
 </div>
 
+<div id="warning2">
+    <h1></h1>
+</div>
+
 <div id="validation" data-courseCode="">
     <div id="aboveTable">
         <h3 id="courseTitle"></h3>
@@ -58,14 +62,14 @@
         <tr>
             <th>
                 <label for="options">Options</label>
-                <select id="options" name="options" onchange="Validation.executeOption()">
+                <select id="options" name="options" onchange="Validation.executeAction()">
                     <option value="Choose An Option">Choose An Option</option>
                     <option value="Select All">Select All</option>
                     <option value="Deselect All">Deselect All</option>
-                    <option value="Select Only No Grade">Select Only No Grade</option>
+                    <option value="Select Only Absents">Select Only Absents</option>
                     <option value="Select Only Grades">Select Only Grades</option>
-                    <option value="Select Validated Grades">Select Validated Grades</option>
-                    <option value="Select Invalidated Grades">Select Invalidated Grades</option>
+                    <option value="Select Validated Results">Select Validated Results</option>
+                    <option value="Select Invalidated Results">Select Invalidated Results</option>
                 </select>
             </th>
             <th>Last Name</th>

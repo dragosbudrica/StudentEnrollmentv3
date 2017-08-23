@@ -70,4 +70,9 @@
         <put-attribute name="body" value="/WEB-INF/views/validation.jsp"/>
     </definition>
 
+    <definition name="accessDenied" extends="base-definition">
+        <put-attribute name="title" value="Access Denied"/>
+        <put-attribute name="body" value="/WEB-INF/views/accessDenied.jsp"/>
+    </definition>
+
 </tiles-definitions>

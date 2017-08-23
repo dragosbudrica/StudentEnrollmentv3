@@ -9,16 +9,33 @@ public class User implements Serializable {
     private long ssn;
     private String email;
     private String password;
-    private String role;
-    private long mark;
+    private String result;
     private boolean validated;
+    private Role role;
+    private long roleId;
 
-    public long getMark() {
-        return mark;
+    public void setRoleId(long roleId) {
+        this.roleId = roleId;
     }
 
-    public void setMark(long mark) {
-        this.mark = mark;
+    public long getRoleId() {
+        return roleId;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public boolean isValidated() {
@@ -75,14 +92,6 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getFullName() {

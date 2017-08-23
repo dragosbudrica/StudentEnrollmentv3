@@ -24,7 +24,7 @@
         <servlet-name>ApplicationContext</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-<!--
+
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>com.kepler.rominfo.filter.AuthenticationFilter</filter-class>
@@ -32,8 +32,7 @@
 
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
-        <url-pattern>/WEB-INF/jsp/secured/*</url-pattern>
-    </filter-mapping>-->
-
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
 </web-app>

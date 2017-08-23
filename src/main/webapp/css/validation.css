@@ -39,12 +39,15 @@ td span {
 }
 
 #validateBtn {
-   display: none;
     margin-right: 10px;
 }
 
-#invalidateBtn {
-    display: none;
+#validateBtn[disabled] {
+    opacity: 0.3;
+}
+
+#invalidateBtn[disabled] {
+    opacity: 0.3;
 }
 
 #courseTitle {
@@ -55,3 +58,7 @@ td span {
     margin-bottom: 15px;
 }
 
+#warning2 {
+    display: none;
+    color: red;
+}

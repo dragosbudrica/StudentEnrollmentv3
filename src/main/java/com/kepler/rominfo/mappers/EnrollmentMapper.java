@@ -11,6 +11,8 @@ import java.util.List;
 public interface EnrollmentMapper {
     void addEnrollment(@Param("studentId") long studentId, @Param("courseCode") long courseCode);
     List<Course> getCoursesOfStudent(@Param("studentId") long studentId);
-    void editMark(@Param("courseCode")long courseCode, @Param("studentId")long studentId, @Param("mark")int mark);
-    void removeMark(@Param("courseCode")long courseCode, @Param("studentId")long studentId);
+    void editResult(@Param("courseCode")long courseCode, @Param("studentId")long studentId, @Param("result")String result);
+    void removeResult(@Param("courseCode")long courseCode, @Param("studentId")long studentId);
+    void validate(@Param("courseCode") long courseCode, @Param("studentId") long studentId);
+    void invalidate(@Param("courseCode") long courseCode, @Param("studentId") long studentId);
 }

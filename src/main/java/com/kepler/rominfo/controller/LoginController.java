@@ -43,7 +43,7 @@ public class LoginController {
         if (user != null) {
             if (userService.checkCredentials(user, loginDto.getEmail(), loginDto.getPassword())) {
                 session.setAttribute("user", user);
-                switch (user.getRole()) {
+                switch (user.getRole().getRoleName()) {
                     case "Admin":
                         mav = new ModelAndView("redirect:/newAccount");
                         break;

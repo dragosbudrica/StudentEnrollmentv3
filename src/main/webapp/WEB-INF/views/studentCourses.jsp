@@ -4,7 +4,7 @@
          pageEncoding="windows-1256"
 %>
 <%@ page session="true" %>
-<c:set var="role" value="${sessionScope.user.role}" />
+<c:set var="role" value="${sessionScope.user.role.roleName}" />
 <script>
     var role = '${role}';
 </script>

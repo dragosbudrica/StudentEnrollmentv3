@@ -57,7 +57,13 @@ public class AuthenticationFilter implements Filter {
                 // user is logged in, continue request
                 resourceRequested = ((HttpServletRequest) servletRequest).getRequestURL().toString();
                 String[] parts = resourceRequested.split("/");
-                Resource res = resourceMapper.getResourceByName(parts[parts.length-1]);
+
+                Resource res;
+                if (isNumeric(parts[parts.length - 1])) {
+                    res = resourceMapper.getResourceByName(parts[parts.length - 2]);
+                } else {
+                    res = resourceMapper.getResourceByName(parts[parts.length - 1]);
+                }
 
                 if (!authorizationMapper.isAuthorized(user.getRole().getRoleId(), res.getResourceId())) {
                     httpServletResponse.sendRedirect(
@@ -66,6 +72,7 @@ public class AuthenticationFilter implements Filter {
                 } else {
                     filterChain.doFilter(servletRequest, servletResponse);
                 }
+
             } else {
                 LOGGER.debug("user is not logged in");
                 // user is not logged in, redirect to login page
@@ -84,5 +91,9 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void destroy() {
         // close resources
+    }
+
+    private boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");
     }
 }

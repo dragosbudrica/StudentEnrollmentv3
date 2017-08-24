@@ -48,11 +48,13 @@ public class RestLectureController {
         return lectures;
     }
 
-    @RequestMapping(value = "/upload/{lectureId}", method = RequestMethod.POST)
-    public @ResponseBody String doUpload(@PathVariable("lectureId") String lectureId, MultipartHttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public @ResponseBody String doUpload(MultipartHttpServletRequest request) {
         String result = null;
 
         MultipartFile multipartFile =  request.getFile("file");
+        String lectureId = request.getParameter("lectureId");
+
         InputStream stream = null;
         try {
             stream = multipartFile.getInputStream();
@@ -67,9 +69,10 @@ public class RestLectureController {
         return result;
     }
 
-    @RequestMapping(value = "/removeLectureAttachment/{lectureId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/removeLectureAttachment", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void removeLectureAttachment(@PathVariable("lectureId") String lectureId) {
+    public void removeLectureAttachment(@RequestBody Map<String, Object> params) {
+        String lectureId = (String) params.get("lectureId");
         try {
             lectureService.removeLectureAttachment(Long.parseLong(lectureId));
         } catch (Exception ex) {

@@ -32,7 +32,7 @@
             <div class="input_with_error">
                 <label for="newCourse_description">Description</label>
                 <textarea id="newCourse_description" rows="5" cols="57" name="description" maxlength="255"
-                          style="resize: none" onkeyup="Enrollment.countChar(this)"></textarea>
+                          style="resize: none" onkeyup="Utils.countChar(this)"></textarea>
                 <span class="error">This field is required</span>
                 <div id="charNum"></div>
             </div>

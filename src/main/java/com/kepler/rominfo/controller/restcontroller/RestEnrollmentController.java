@@ -41,10 +41,11 @@ public class RestEnrollmentController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/enroll/{courseCode}", method = RequestMethod.POST)
+    @RequestMapping(value = "/enroll", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    public String enroll(@PathVariable("courseCode") String courseCode, HttpSession session) {
+    public String enroll(@RequestBody Map<String, Object> params, HttpSession session) {
         String enrollmentResult = null;
+        String courseCode = (String) params.get("courseCode");
         User user = (User) session.getAttribute("user");
         Student student = userService.findStudent(user.getEmail());
         Course course = courseService.getCourseByCode(Long.parseLong(courseCode));

@@ -16,7 +16,7 @@ Lectures.displayLecturesProfessor = function displayLecturesProfessor(data, cour
             $(tbodyLectures).append(tr);
         } else if (item.attachment !== null) {
             tr.append("<td>" + item.name + "</td>");
-            tr.append("<td><a style='float:left' href=\"/download/"+item.lectureId+"\"><img src=\"/resources/images/rsz_download-pdf.png\"/></a>&nbsp;&nbsp;&nbsp;<button data-lectureId="+item.lectureId+" data-courseCode="+courseCode+" style=\"float:right\" onclick='Lectures.removeAttachment(this)' type=\"button\" value=\"Upload\"><img src=\"/resources/images/rsz_rsz_2delete-2-xxl.png\"/></button></td>");
+            tr.append("<td><a style='float:left' href=\"/download?lectureId="+item.lectureId+"\"><img src=\"/resources/images/rsz_download-pdf.png\"/></a>&nbsp;&nbsp;&nbsp;<button data-lectureId="+item.lectureId+" data-courseCode="+courseCode+" style=\"float:right\" onclick='Lectures.removeAttachment(this)' type=\"button\" value=\"Upload\"><img src=\"/resources/images/rsz_rsz_2delete-2-xxl.png\"/></button></td>");
             tbodyLectures.append(tr);
         }
     }
@@ -40,7 +40,7 @@ Lectures.displayLecturesStudent = function displayLecturesStudent(data, courseNa
             $(tbodyLectures).append(tr);
         } else if (item.attachment !== null) {
             tr.append("<td>" + item.name + "</td>");
-            tr.append("<td><a href=\"/download/"+item.lectureId+"\"><img src=\"/resources/images/rsz_download-pdf.png\"/></a></td>");
+            tr.append("<td><a href=\"/download?lectureId="+item.lectureId+"\"><img src=\"/resources/images/rsz_download-pdf.png\"/></a></td>");
             tbodyLectures.append(tr);
         }
     }
@@ -62,8 +62,9 @@ Lectures.uploadFile = function uploadFile(input, button) {
 
         var formData = new FormData($('#fileForm'));
         formData.append('file', input.files[0]);
+        formData.append('lectureId', lectureId);
         $.ajax({
-            url: "/upload/"+lectureId,
+            url: "/upload",
             type: 'POST',
             data: formData,
             enctype: 'multipart/form-data',
@@ -83,9 +84,15 @@ Lectures.removeAttachment = function removeAttachment(removeAtt) {
     var lectureId = $(removeAtt).attr('data-lectureId');
     var courseCode = $(removeAtt).attr('data-courseCode');
 
+    var jsonParam = JSON.stringify({
+        'lectureId': lectureId
+    });
+
     $.ajax({
-        url: "/removeLectureAttachment/"+lectureId,
+        url: "/removeLectureAttachment",
         type: 'DELETE',
+        data: jsonParam,
+        contentType: 'application/json',
         traditional: true,
         success: function (data) {
             var tbody = $("#tbodyCourses");

@@ -5,7 +5,14 @@
 <mapper namespace="com.kepler.rominfo.mappers.AuthorizationMapper">
 
     <select id="isAuthorized" resultType="boolean">
-        SELECT EXISTS(SELECT 1 FROM "authorization" WHERE roleid = #{roleId} AND resourceid = #{resourceId})
+        SELECT
+            CASE
+            WHEN COUNT(1) = 1 THEN TRUE
+                              ELSE FALSE
+            END
+        FROM "authorization"
+        WHERE roleid = #{roleId}
+        AND resourceid = #{resourceId}
     </select>
 
 </mapper>

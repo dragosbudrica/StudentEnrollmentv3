@@ -28,9 +28,9 @@ public class LectureController {
         this.lectureService = lectureService;
     }
 
-    @RequestMapping(value = "/download/{lectureId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/download", method = RequestMethod.GET)
     public @ResponseBody
-    String doDownload(@PathVariable("lectureId") String lectureId, HttpServletResponse response) {
+    String doDownload(@RequestParam("lectureId") String lectureId, HttpServletResponse response) {
         String result = null;
 
         Lecture lecture = lectureService.getLectureById(Long.parseLong(lectureId));

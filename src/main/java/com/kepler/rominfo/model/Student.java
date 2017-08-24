@@ -1,5 +1,6 @@
 package com.kepler.rominfo.model;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,4 +43,5 @@ public class Student implements Serializable {
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
     }
+
 }

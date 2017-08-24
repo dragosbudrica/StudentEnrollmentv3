@@ -74,9 +74,15 @@ AllCourses.checkEnrollDialogActions = function checkEnrollDialogActions() {
 
 AllCourses.sendEnrollAjax = function sendEnrollAjax(courseCode) {
     var message = $('#message');
+    var jsonParam = JSON.stringify({
+        'courseCode': courseCode
+    });
+
     $.ajax({
-        url: "/enroll/"+courseCode,
+        url: "/enroll",
         type: 'POST',
+        data: jsonParam,
+        contentType: 'application/json',
         traditional: true,
         success: function (data) {
             $(".cover").fadeOut('slow');

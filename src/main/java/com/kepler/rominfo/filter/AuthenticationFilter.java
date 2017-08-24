@@ -58,12 +58,7 @@ public class AuthenticationFilter implements Filter {
                 resourceRequested = ((HttpServletRequest) servletRequest).getRequestURL().toString();
                 String[] parts = resourceRequested.split("/");
 
-                Resource res;
-                if (isNumeric(parts[parts.length - 1])) {
-                    res = resourceMapper.getResourceByName(parts[parts.length - 2]);
-                } else {
-                    res = resourceMapper.getResourceByName(parts[parts.length - 1]);
-                }
+                Resource res = resourceMapper.getResourceByName(parts[parts.length - 1]);
 
                 if (!authorizationMapper.isAuthorized(user.getRole().getRoleId(), res.getResourceId())) {
                     httpServletResponse.sendRedirect(
@@ -91,9 +86,5 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void destroy() {
         // close resources
-    }
-
-    private boolean isNumeric(String str) {
-        return str.matches("-?\\d+(\\.\\d+)?");
     }
 }
